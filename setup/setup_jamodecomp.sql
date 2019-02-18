@@ -1,0 +1,1 @@
+CREATE FUNCTION jamodecomp RETURNS STRING SONAME 'udf_jamodecomp.so';

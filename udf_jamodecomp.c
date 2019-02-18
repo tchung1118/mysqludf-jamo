@@ -5,13 +5,13 @@
 #include <mysql.h>
 
 my_bool jamodecomp_init(UDF_INIT *initid, UDF_ARGS *args, char *message) {
-  JamoDecompState *state
+  JamoDecompState *state;
   if (args->arg_count != 1) {
-    strcpy(message, "jamodecomp requires exactly one string argument");
+    strcpy(message, "jamodecomp requires exactly one string argument!");
     return 1;
   }
   if (args->arg_type[0] != STRING_RESULT) {
-    strcpy(message, "jamodecomp requires exactly one string argument");
+    strcpy(message, "jamodecomp requires exactly one string argument!");
     return 1;
   }
   initid->max_length = args->lengths[0] * 4;
@@ -26,10 +26,15 @@ char * jamodecomp(
   char *is_null, char *error
 ) {
   JamoDecompState *state = (JamoDecompState *) initid->ptr;
-  char *decomp_ret;
-  jamo_decomp_state_set_original(state, args->args[0], args->lenghts[0]);
+  if (args->args[0] == NULL || args->lengths[0] == 0) {
+    result = NULL;
+    *is_null = 1;
+    *length = 0;
+    return result;
+  }
+  jamo_decomp_state_set_original(state, args->args[0], args->lengths[0]);
   // allocate enough memory for return
-  *length = jamo_decompose_str(result, state, args->lenghts[0] * 4) - 1;
+  *length = jamo_decompose_str(result, state, args->lengths[0] * 4) - 1;
   jamo_decomp_state_flush(state);
   return result;
 }
