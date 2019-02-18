@@ -16,38 +16,18 @@
 #define IS_HANGUL_SYLLABLE(wc) (wc >= SYL_BASE && wc < SYL_BASE + SYL_COUNT)
 
 // Tails to leads
-#define CONV_G(c) c-0xA8
-#define CONV_GG(c) c-0xA8
+#define CONV_G_GG(c) c-0xA8
 #define CONV_N(c) c-0xA9
 #define CONV_D(c) c-0xAB
 #define CONV_L(c) c-0xAA
-#define CONV_M(c) c-0xB1
-#define CONV_B(c) c-0xB1
-#define CONV_S(c) c-0xB1
-#define CONV_SS(c) c-0xB1
-#define CONV_NG(c) c-0xB1
-#define CONV_J(c) c-0xB1
-#define CONV_C(c) c-0xB0
-#define CONV_K(c) c-0xB0
-#define CONV_T(c) c-0xB0
-#define CONV_P(c) c-0xB0
-#define CONV_H(c) c-0xB0
-#define CONV_TAILS(c) (c == 0x11A8) ? CONV_G(c) : ( \
-  (c == 0x11A9) ? CONV_GG(c) : ( \
+#define CONV_M_J(c) c-0xB1
+#define CONV_C_H(c) c-0xB0
+#define CONV_TAILS(c) (c == 0x11A8 || c == 0x11A9) ? CONV_G_GG(c) : ( \
   (c == 0x11AB) ? CONV_N(c) : ( \
   (c == 0x11AE) ? CONV_D(c) : ( \
   (c == 0x11AF) ? CONV_L(c) : ( \
-  (c == 0x11B7) ? CONV_M(c) : ( \
-  (c == 0x11B8) ? CONV_B(c) : ( \
-  (c == 0x11BA) ? CONV_S(c) : ( \
-  (c == 0x11BB) ? CONV_SS(c) : ( \
-  (c == 0x11BC) ? CONV_NG(c) : ( \
-  (c == 0x11BD) ? CONV_J(c) : ( \
-  (c == 0x11BE) ? CONV_C(c) : ( \
-  (c == 0x11BF) ? CONV_K(c) : ( \
-  (c == 0x11C0) ? CONV_T(c) : ( \
-  (c == 0x11C1) ? CONV_P(c) : ( \
-  (c == 0x11C2) ? CONV_H(c) : c)))))))))))))))
+  (c == 0x11B7 || c == 0x11B8 || (c >= 0x11BA && c <= 0x11BD)) ? CONV_M_J(c) : ( \
+  (c >= 0x11BE && c <= 0x11C2) ? CONV_C_H(c) : c)))))
 
 // Composite tails and their composing leads
 static const int TAIL_GS[] = {0x1100, 0x1109};
